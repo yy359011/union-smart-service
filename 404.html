@@ -6,24 +6,23 @@
     <title>工会智慧服务</title>
     <script>
       // GitHub Pages SPA 路由重定向
-      // 将路径从 /xxx 转换为 /?path=xxx
-      var path = window.location.pathname;
+      // 将任意路径重定向到根路径，保留 hash 路由
+      var pathname = window.location.pathname;
       var search = window.location.search;
       var hash = window.location.hash;
       
-      // 移除仓库名前缀（如果有）
-      var repoName = '/union-smart-service';
-      if (path.indexOf(repoName) === 0) {
-        path = path.substring(repoName.length);
+      // 如果 URL 中没有 hash，添加一个
+      if (!hash || hash === '#') {
+        // 从 pathname 中提取路径作为 hash
+        var pathParts = pathname.split('/');
+        var lastPart = pathParts[pathParts.length - 1];
+        if (lastPart && lastPart !== '' && lastPart !== 'index.html') {
+          hash = '#/' + lastPart;
+        }
       }
       
-      // 构建新的 URL
-      var newUrl = window.location.origin + window.location.pathname.split('/').slice(0, -1).join('/') + '/';
-      if (path && path !== '/') {
-        newUrl = window.location.origin + repoName + '/?redirect=' + encodeURIComponent(path + search + hash);
-      }
-      
-      window.location.replace(newUrl);
+      // 重定向到根路径
+      window.location.replace(window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1) + '/' + hash);
     </script>
   </head>
   <body>
